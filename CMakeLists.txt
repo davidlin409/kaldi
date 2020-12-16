@@ -12,11 +12,17 @@ if(NOT PYTHON_EXECUTABLE)
 endif()
 
 message(STATUS "Running gen_cmake_skeleton.py")
+set(IS_LIB_SHARE "")
+if(BUILD_SHARED_LIBS)
+    set(IS_LIB_SHARE "--shared")
+endif()
 execute_process(COMMAND ${PYTHON_EXECUTABLE}
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gen_cmake_skeleton.py"
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "--quiet"
+    ${IS_LIB_SHARE}
 )
+unset(IS_LIB_SHARE)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -159,9 +165,12 @@ if(${KALDI_USE_PATCH_NUMBER})
     set(KALDI_VERSION "${KALDI_VERSION}.${KALDI_PATCH_NUMBER}")
 endif()
 
-get_third_party(openfst)
-set(OPENFST_ROOT_DIR ${CMAKE_BINARY_DIR}/openfst)
-include(third_party/openfst_lib_target)
+# get_third_party(openfst)
+# set(OPENFST_ROOT_DIR ${CMAKE_BINARY_DIR}/openfst)
+# include(third_party/openfst_lib_target)
+include_directories(${CMAKE_INSTALL_PREFIX}/include)
+link_directories(${CMAKE_INSTALL_PREFIX}/lib)
+find_library(<VAR> fst REQUIRED)
 link_libraries(fst)
 
 # add all native libraries
@@ -243,3 +252,17 @@ install(FILES ${CMAKE_BINARY_DIR}/cmake/kaldi-config.cmake ${CMAKE_BINARY_DIR}/c
     DESTINATION lib/cmake/kaldi
 )
 install(EXPORT kaldi-targets DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/kaldi)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/egs/wsj/s5/utils/
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/kaldi/egs/wsj/s5/utils/
+    USE_SOURCE_PERMISSIONS
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/egs/wsj/s5/steps/
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/kaldi/egs/wsj/s5/steps/
+    USE_SOURCE_PERMISSIONS
+)
+
+install(
+    CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/cmake/bashrc_config.py ${CMAKE_INSTALL_PREFIX} )"
+)
