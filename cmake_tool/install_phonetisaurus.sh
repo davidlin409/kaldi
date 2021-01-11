@@ -34,6 +34,7 @@ else
 fi
 
 (
+    if [ ! -d ${ROOT} ]; then mkdir -p ${ROOT}; fi
     cd ${ROOT}
     if [ ! -d ./phonetisaurus-g2p ] ; then
     $GIT clone https://github.com/AdolfVonKleist/Phonetisaurus.git phonetisaurus-g2p ||
