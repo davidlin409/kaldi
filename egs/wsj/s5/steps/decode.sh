@@ -58,10 +58,10 @@ graphdir=$1
 data=$2
 dir=$3
 srcdir=`dirname $dir`; # The model directory is one level up from decoding directory.
-sdata=$data/split$nj;
+sdata=$data/split${nj}utt;  # David2 Lin: Use per-utt splitting
 
 mkdir -p $dir/log
-[[ -d $sdata && $data/feats.scp -ot $sdata ]] || split_data.sh $data $nj || exit 1;
+[[ -d $sdata && $data/feats.scp -ot $sdata ]] || split_data.sh --per-utt $data $nj || exit 1;
 echo $nj > $dir/num_jobs
 
 if [ -z "$model" ]; then # if --model <mdl> was not specified on the command line...

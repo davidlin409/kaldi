@@ -79,14 +79,14 @@ data=$2
 dir=`echo $3 | sed 's:/$::g'` # remove any trailing slash.
 
 srcdir=`dirname $dir`; # Assume model directory one level up from decoding directory.
-sdata=$data/split$nj;
+sdata=$data/split${nj}utt;  # David2 Lin: Use per-utt splitting
 
 thread_string=
 [ $num_threads -gt 1 ] && thread_string="-parallel --num-threads=$num_threads"
 
 
 mkdir -p $dir/log
-split_data.sh $data $nj || exit 1;
+split_data.sh --per-utt $data $nj || exit 1;
 echo $nj > $dir/num_jobs
 splice_opts=`cat $srcdir/splice_opts 2>/dev/null` # frame-splicing options.
 cmvn_opts=`cat $srcdir/cmvn_opts 2>/dev/null`
