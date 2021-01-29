@@ -37,16 +37,16 @@ fi
     if [ ! -d ${ROOT} ]; then mkdir -p ${ROOT}; fi
     cd ${ROOT}
     if [ ! -d ./phonetisaurus-g2p ] ; then
-    $GIT clone https://github.com/AdolfVonKleist/Phonetisaurus.git phonetisaurus-g2p ||
+    $GIT clone https://github.com/davidlin409/Phonetisaurus.git phonetisaurus-g2p ||
     {
         echo  >&2 "$0: Warning: git clone operation ended unsuccessfully"
         echo  >&2 "  I will assume this is because you don't have https support"
         echo  >&2 "  compiled into your git "
-        $GIT clone https://github.com/AdolfVonKleist/Phonetisaurus.git phonetisaurus-g2p
+        $GIT clone https://github.com/davidlin409/Phonetisaurus.git phonetisaurus-g2p
 
         if [ $? -ne 0 ]; then
         echo  >&2 "$0: Error git clone operation ended unsuccessfully"
-        echo  >&2 "  Clone the github repository (https://github.com/AdolfVonKleist/Phonetisaurus.git)"
+        echo  >&2 "  Clone the github repository (https://github.com/davidlin409/Phonetisaurus.git)"
         echo  >&2 "  manually make and install in accordance with directions."
         fi
     }
