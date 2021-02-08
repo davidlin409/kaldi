@@ -170,7 +170,8 @@ else
   cp $alidir/tree $dir/tree
 
   # make phone counts for analysis,
-  [ -e $lang/phones.txt ] && analyze-counts --verbose=1 --symbol-table=$lang/phones.txt --counts-dim=$num_pdf \
+  num_phone=$(hmm-info $alidir/final.mdl | awk '/phones/{print $4}')
+  [ -e $lang/phones.txt ] && analyze-counts --verbose=1 --symbol-table=$lang/phones.txt --counts-dim=$num_phone \
     ${frame_weights:+ "--frame-weights=$frame_weights"} \
     ${utt_weights:+ "--utt-weights=$utt_weights"} \
     "$labels_tr_phn" /dev/null 2>$dir/log/analyze_counts_phones.log
